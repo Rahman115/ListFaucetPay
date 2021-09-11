@@ -13,7 +13,9 @@ $url = [
 
 // User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:92.0) Gecko/20100101 Firefox/92.0
 $user = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:92.0) Gecko/20100101 Firefox/92.0";
-$cookie = "cf_clearance=loBLH0XK7U08ZMWuYVUdiFZzSETqDPhFdg61iKttmAc-1631391081-0-250; PHPSESSID=0f526e70abecd8908579335a04f1d34d; cf_chl_prog=a12";
+
+// Cookie: cf_clearance=dtehCGriwXK.75Im54oaOHnD3vlS.xl_qwH7uMPFQuk-1631397412-0-250; PHPSESSID=0f526e70abecd8908579335a04f1d34d; referral=5553; cf_chl_prog=a9
+$cookie = "cf_clearance=dtehCGriwXK.75Im54oaOHnD3vlS.xl_qwH7uMPFQuk-1631397412-0-250; PHPSESSID=0f526e70abecd8908579335a04f1d34d; cf_chl_prog=a9";
 
 $u = [
 'User-Agent: '.$user,
@@ -91,25 +93,41 @@ $ch=curl_init();
     curl_close($ch);
     return $json;
 }
+echo "\033[1;33mSelamat Datang \033[0;31mlitecoin-miner.cc\n"; sleep(3);
+echo "\033[1;33mCreate Code \033[0;31m@AbuduChoy\n"; sleep(3);
+echo "\033[0;35mLet Start\n"; sleep(5);
+// 0.00000047690
+// 0.00001
+$minWD = 0.00001;
+$fWD = floatval($minWD);
 
 while (true) {
-	// system('clear');
+	system('clear');
 	$data = getHome($u, $url['home']);
-	print_r($data);
+
+	$WD =$fWD - $data['bl'];
+	$sWD = (string)$WD;
+	echo "WD -{$sWD}\n";
+	echo "\n\033[0;37mBalance \033[1;33m".$data['string']." \033[0;37mLTC";
+	echo "\n\033[1;34mTake cuan";
+	// print_r($data);
 	if($data['http'] == 200) { 
 		echo "\n";
-		for($i = 0; $i < 5; $i++){
+		for($i = 1; $i <= 50; $i++){
 			for($j = 30; $j > -1; $j--){
 				echo " \r";
-				echo "[{$i}] Reload";
+				echo "\033[0;37m[\033[1;31m{$j}\033[0;37m]\033[1;30m Refresh";
 				sleep(1);
 
 			}
 			echo "\n";
 			$load[$i] = getWithdrawl($u, $url['claim']);
 			if($load[$i]["error"] == false) {
-				echo "\nLoad {$i}";
-				echo "\nMessage : ".$load[$i]["message"];
+				echo "\n\033[0;37m> Loader \033[1;33m{$i}";
+				echo "\n\033[0;37m> Message : \033[0;32m".$load[$i]["message"];
+				echo "\n";
+			} else {
+				exit();
 			}
 		}
 	} else {
