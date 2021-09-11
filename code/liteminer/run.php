@@ -7,11 +7,13 @@ system('clear');
 
 // aunt link
 $url = [
-	'cek' =>"https://iqfaucet.com/account.php",
-	'wd' => "https://iqfaucet.com/account.php?withdr=fp"
+	'home' =>"https://litecoin-miner.cc/",
+	'claim' => "https://litecoin-miner.cc/ajax.php"
 ];
+
+// User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:92.0) Gecko/20100101 Firefox/92.0
 $user = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:92.0) Gecko/20100101 Firefox/92.0";
-$cookie = "PHPSESSID=ivanl499kr1oed4espp1tnrhg6; refer=208087; bitmedia_fid=eyJmaWQiOiI1M2I4NzdhNWEyNDhiNDhiMTM4YWE3ZjZjYjY0Yzc2MCIsImZpZG5vdWEiOiI1MjA4ODI4ODczNTYwMjdmOGZlNGZiYTQyY2NkNGQ0NSJ9; _ccnsad_pop=500";
+$cookie = "cf_clearance=loBLH0XK7U08ZMWuYVUdiFZzSETqDPhFdg61iKttmAc-1631391081-0-250; PHPSESSID=0f526e70abecd8908579335a04f1d34d; cf_chl_prog=a12";
 
 $u = [
 'User-Agent: '.$user,
@@ -20,7 +22,7 @@ $u = [
 'Cookie: '.$cookie
 ];
 
-function getCek($u, $url){
+function getHome($u, $url){
 	$ch=curl_init();
   	curl_setopt_array($ch, array(
 	    CURLOPT_URL => $url,
@@ -32,16 +34,25 @@ function getCek($u, $url){
 	    )
     );
     $result = curl_exec($ch);
-
-    $bl = explode(' DOGE</h2>', $result)[0];
-    $blc = explode('<h2>', $bl)[1];
 	$info = curl_getinfo($ch);
+
+
+	if($info['http_code'] == 200) { 
+		$bl = explode('<h3 class="blog-balance">', $result)[1];
+		$blc = explode(' Ltc</h3>', $bl)[0];
+	
+	} else {
+		$blc = 0;
+	}
+    
+	
 
 	$val = floatval($blc);
 
 	// print_r(gettype($val));
 
     $dt = [
+    	'string' => $blc,
     	'bl' => $val,
     	'http' => $info['http_code']
     ];
@@ -62,60 +73,51 @@ $ch=curl_init();
 	    CURLOPT_RETURNTRANSFER => 1,
 	    //CURLOPT_CUSTOMREQUEST => 'GET',
 	    CURLOPT_FOLLOWLOCATION => 1,
+	    CURLOPT_POST => 1,
+	    CURLOPT_POSTFIELDS => "action=claim",
 	    CURLOPT_HTTPHEADER => $u,
 	    CURLOPT_SSL_VERIFYPEER => 0,
 	    )
     );
     $result = curl_exec($ch);
-
-    $bl = explode(' DOGE was sent to your account', $result)[0];
-    $blc = explode('<div class="alert alert-success">', $bl)[1];
 	$info = curl_getinfo($ch);
 
-	print_r(gettype($blc));
+	$json = json_decode($result, true);
 
-    $dt = [
-    	'bl' => $blc,
-    	'http' => $info['http_code']
-    ];
-	
-	echo "\nHas Send : \n";
-	print_r($dt);
+	// var_dump($json);
+	// print_r($result);
     // print_r($info);
     
     curl_close($ch);
-    // return $result;
-
-
-
+    return $json;
 }
 
 while (true) {
-	system('clear');
+	// system('clear');
+	$data = getHome($u, $url['home']);
+	print_r($data);
+	if($data['http'] == 200) { 
+		echo "\n";
+		for($i = 0; $i < 5; $i++){
+			for($j = 30; $j > -1; $j--){
+				echo " \r";
+				echo "[{$i}] Reload";
+				sleep(1);
 
-	$hs = getCek($u, $url['cek']);
-
-	if($hs['bl'] > 0.00000000) {
-		echo "\nBalance : ".$hs['bl'];
-		sleep(3);
-		echo "\nLakukan WD";
-		getWithdrawl($u, $url['wd']);
-		for($i = 300; $i > -1; $i--){
-			echo " \r";
-			echo "[{$i}] Reload";
-			sleep(1);
+			}
+			echo "\n";
+			$load[$i] = getWithdrawl($u, $url['claim']);
+			if($load[$i]["error"] == false) {
+				echo "\nLoad {$i}";
+				echo "\nMessage : ".$load[$i]["message"];
+			}
 		}
 	} else {
-		// exit();
-		echo "\nWD panding";
-		for($i = 60; $i > -1; $i--){
-			echo " \r";
-			echo "[{$i}] Reload";
-			sleep(1);
-		}
 
-
-	} // end if else
+		exit();
+	}
+	
+	// var_dump($data);
 
 	echo "\n";
 
