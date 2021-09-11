@@ -46,7 +46,7 @@ function getCek($u, $url){
     	'http' => $info['http_code']
     ];
 	
-	 print_r($result);
+	 // print_r($result);
     // print_r($info);
     
     curl_close($ch);
@@ -106,7 +106,7 @@ while (true) {
 			sleep(1);
 		}
 	} else {
-		exit();
+		// exit();
 		echo "\nWD panding";
 		for($i = 60; $i > -1; $i--){
 			echo " \r";
