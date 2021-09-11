@@ -1,6 +1,12 @@
 # FaucetPayList
 Faucet List gan!
 kita akan melakukan sedikit perubahan
+
+### Git Clone
+```html
+https://github.com/Rahman115/ListFaucetPay.git
+```
+
 ### Address FaucetPay
 #### Oppipo10
 - BTC 
