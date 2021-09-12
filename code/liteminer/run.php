@@ -15,7 +15,7 @@ $url = [
 $user = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:92.0) Gecko/20100101 Firefox/92.0";
 
 // Cookie: cf_clearance=dtehCGriwXK.75Im54oaOHnD3vlS.xl_qwH7uMPFQuk-1631397412-0-250; PHPSESSID=0f526e70abecd8908579335a04f1d34d; referral=5553; cf_chl_prog=a9
-$cookie = "cf_clearance=dtehCGriwXK.75Im54oaOHnD3vlS.xl_qwH7uMPFQuk-1631397412-0-250; PHPSESSID=0f526e70abecd8908579335a04f1d34d; cf_chl_prog=a9";
+$cookie = "cf_clearance=1RRk_Eaya3WUVsnSYCDPJdQxD9KxGV51HPGIdQDfA_I-1631400216-0-250; PHPSESSID=0f526e70abecd8908579335a04f1d34d; cf_chl_prog=a10";
 
 $u = [
 'User-Agent: '.$user,
