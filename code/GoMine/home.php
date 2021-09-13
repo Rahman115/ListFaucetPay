@@ -93,6 +93,17 @@ function getTime() {
 	$end = gmdate("H:i:s", time() + 3600*($timezone+date("I"))); 
 	// echo gmdate("Y/m/j H:i:s", time() + 3600*($timezone+date("I"))); 
 
+	$clock = explode(':', $end);
+
+	if($clock[0] == "00" && $clock[1] == "00" && $clock[2] == "00"){
+		echo "\n";
+		echo "Waktu selesai 00:00:00\n"; sleep(1);
+		echo "Cek Link ->\n";sleep(1);
+		echo "https://gomine.xyz/user/home\n";
+		exit();
+	}
+	// var_dump($clock);
+
 	return "[{$end}]";
 }
 
