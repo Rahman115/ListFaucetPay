@@ -1,21 +1,13 @@
 <?php 
+include 'pay.php';
 system('clear');
-// set the default timezone to use.
-date_default_timezone_set('UTC');
 
-$timezone  = -4; //(GMT -4:00) waktu server
-$end = gmdate("H:i:s", time() + 3600*($timezone+date("I"))); 
-// echo gmdate("Y/m/j H:i:s", time() + 3600*($timezone+date("I"))); 
+// echo $a;
+// print_r($dtPay);
 
-
-
-$url = [
-	'home' =>"https://gomine.xyz/user/home",
-	'cl' => "https://gomine.xyz/inc/data.php"
-];
 
 $user = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:92.0) Gecko/20100101 Firefox/92.0";
-$cookie = "PHPSESSID=n43dki4t9g7nvd7c6i3nebdio2; _ga=GA1.2.688411866.1631402037; _gid=GA1.2.1057402092.1631402037; popcashpu=1; _data_html=158-1; _data_cpc=78-1; _gat_gtag_UA_171440311_1=1";
+$cookie = "PHPSESSID=dga4o5jbl5hqbe0b7fs8h7ngs5; __.popunder=1; _ga=GA1.2.1385783993.1631486376; _gid=GA1.2.1011802658.1631486376; _data_cpc=78-5_229-5; popcashpu=1; _data_pop=234-1; _data_html=158-1";
 
 $u = [
 'User-Agent: '.$user,
@@ -88,13 +80,28 @@ function collect($u, $url) {
     $result = curl_exec($ch);
     $info = curl_getinfo($ch);
 
-    
-    print_r($result);
-
-        
     curl_close($ch);
-    // return $data;
+    return $result;
 }
+
+
+function getTime() {
+	// set the default timezone to use.
+	date_default_timezone_set('UTC');
+
+	$timezone  = -4; //(GMT -4:00) waktu server
+	$end = gmdate("H:i:s", time() + 3600*($timezone+date("I"))); 
+	// echo gmdate("Y/m/j H:i:s", time() + 3600*($timezone+date("I"))); 
+
+	return "[{$end}]";
+}
+
+function out($tm, $text, $sl){
+	echo $tm." ";
+	echo $text."\n";
+	sleep($sl);
+}
+
 // POST -> colect
 	// https://gomine.xyz/inc/data.php
 // response  ----> 0.00035144
@@ -103,26 +110,69 @@ function collect($u, $url) {
 // $blc = "7.5095E-5";
 // $str = sprintf("%d", $blc);
 // var_dump($str);
+echo "\n";
+$n = 0;
 while (true) {
-	echo "[{$end}]";
+	$set = setPay($u, $url);
+	$dtPay = getData($set);
 
-	echo "\n";
+	$n++;
 	// code...
 	$dt = setData($u, $url['home']);
+	out(getTime(), "[{$n}] Refresh...", 1);
 
+	
+	if($dtPay['var'] > 0.0005) { 
+		out(getTime(), "Walet   {$dtPay['balance']} TRX", 1);
+		out(getTime(), "Get Withdrawl {$count_wd} TRX", 1);
+		$ms = wd($u, $url);
+		out(getTime(), "{$ms}", 10);
+	} else {
+		out(getTime(), "Walet   {$dtPay['balance']} TRX", 1);
+	}
+	echo getTime();
+	echo " Miners +";
+	echo rtrim(sprintf('%.10f',floatval($dt['bl'])),'0');
+	echo " TRX \n"; sleep(1);
+	out(getTime(), "Cek Saldo", 2);
 	if($dt['bl'] > 0.0001){
-		echo "Exe\n";
-		collect($u, $url['cl']);
-		sleep(3);
+		out(getTime(), "Menyimpan saldo ke walet", 2);
+		$col = collect($u, $url['cl']);
+		out(getTime(), "Berhasil menyimpan {$col} TRX", 5);
+		out(getTime(), "Reload system...", 5);
+		system('clear');
 	} else { 
-		print_r($dt);
+		out(getTime(), "+--Saldo belum cukup.", 2);
+		$v = floatval($dt['bl']);
+		$pl = floatval($dt['sec']);
+		$pls = $v;
+
+		$second = 180;
+		$menit = $second / 60;
+		out(getTime(), "+--Mining {$menit} menit", 1);
+
+		for($i = $second; $i > -1; $i--){
+		
+			$pls = $pls + $pl;
+			$range = $i % 6;
+
+			$per = ($second - $i) * 100 / $second;
+			$pc = floor($per);
+			// if($range == 0) { 
+				echo " \r";
+				echo getTime()." ";
+				echo "[{$pc}%] Mine +";
+				echo rtrim(sprintf('%.10f',floatval($pls)),'0'); 
+				echo " TRX";
+				echo "   \r";
+
+				// }
+			sleep(1);
+		}
+		echo "\n";
+		out(getTime(), "Next reload...", 5);
 	}
-	for($i = 100; $i > -1; $i--){
-		echo " \r";
-		echo "[{$i}] Reload";
-		sleep(1);
-	}
-	echo "\n";
+	
 }
 
 echo "\n";
