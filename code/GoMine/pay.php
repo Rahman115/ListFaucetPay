@@ -1,23 +1,8 @@
 <?php
 system('clear');
 
-/**
-<small>Available for payout <h2 class="text-center"><span> 0.04562194   </span> <strong><span class="val">TRX</span></strong></h2></small>
-</div>
-
-<h4 style='color:green'>0.0002 TRX Paid Successfully to address TQWEaCKTVNzFSi7s29RamaiQou8VpgxNfF</h4><!-- Bittraffic - Ad Display Code -->
-
-
-</center>
-<br><h2>Withdrawal History</h2><center><table id='withdraw'>
-
-<tr><th style='width:10%'>id</th><th style='width:15%'>Date</th><th style='width:40%'>Account</th><th style='width:15%'>Amount</th><th style='width:10%'>Status</th></tr>
-
-<tr><td>27722</td><td>2021-09-12</td><td>TQWEaCKTVNzFSi7s29RamaiQou8VpgxNfF</td><td>0.0002 TRX</td><td><b style="color:green;">Paid</b></td></tr>
-<tr><td>27719</td><td>2021-09-12</td><td>TQWEaCKTVNzFSi7s29RamaiQou8VpgxNfF</td><td>0.0001 TRX</td><td><b style="color:green;">Paid</b></td></tr></table></center><br><br><br>
-
-**/
-// kumpulan link
+$user = "";
+$cookie = "";
 
 $count_wd = "0.0005";
 
@@ -25,12 +10,18 @@ $url = [
 	'uri' => "https://gomine.xyz/user/pay",
 	'data' => "amount={$count_wd}&fpay=",
 	'home' =>"https://gomine.xyz/user/home",
-	'cl' => "https://gomine.xyz/inc/data.php"
+	'cl' => "https://gomine.xyz/inc/data.php",
+	'urlc' => "https://gomine.xyz/user/ptc",
+	'ptc' => "https://skippyads.com/?page=wall&p=iriyFwfnGmx&u=8692",
+	'get' => "http://skippyads.com/?page=click&p=iriyFwfnGmx&i=329&u=8692",
+	'verify' => "http://skippyads.com/?page=verify&p=iriyFwfnGmx&i=328&u=8692&t=ac02a50fd8293df96cdca0901e4f16af"
 ];
 
 
-$user = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:92.0) Gecko/20100101 Firefox/92.0";
-$cookie = "PHPSESSID=dga4o5jbl5hqbe0b7fs8h7ngs5; __.popunder=1; _ga=GA1.2.1385783993.1631486376; _gid=GA1.2.1011802658.1631486376; _data_cpc=78-5_229-5; popcashpu=1; _data_pop=234-1; _data_html=158-1";
+
+// PC
+// $user = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:92.0) Gecko/20100101 Firefox/92.0";
+// $cookie = "PHPSESSID=22rg7jc8kvm54b11u7kqq123a0; _ga=GA1.2.1166790665.1631564548; _gid=GA1.2.1985558678.1631564548; popcashpu=1; _data_cpc=32-1_78-3; _gat_gtag_UA_171440311_1=1; __.popunder=1";
 
 $u = [
 'User-Agent: '.$user,
@@ -137,37 +128,177 @@ function wd($u, $url) {
     return $mesage;
 }
 
-// while (true) {
-// 	system('clear');
-// 	echo("\n");
-	
+function closing($dt, $t1, $u, $url){
+	if($t1[0] == 23 && $t1[1] == 42) {
+		out(getTime(), "Menunggu waktu closing . . .", 1);
+			for($i = 960; $i > -1; $i--){
+			//$pls = $pls + $pl;
+			$range = $i % 3;
+		$per = (960 - $i) * 100 / 960;
+		$pc = floor($per);
+		
+		echo " \r";
+		echo getTime()." ";
+		echo "\033[0;31m[\033[0;33m{$pc}%\033[0;31m]\033[0;37m Closing";
+		if($range == 0) {
+			echo ".";
+		} else if($range == 1){
+			echo "..";
+		} else {
+			echo "...";
+		}
+		
+		echo "   \r";
+		
+		sleep(1);
+		} // end for
 
-// 	showData($dt);
-// 	if($dt['var'] > 0.0001) { 
-// 		echo "\nGet Withdrawl {$count_wd} \n";
-// 		for($i = 900; $i > -1; $i--){
-// 			$range = $i % 6;
+		if($dt['bl'] > 0.0001){
+			out(getTime(), "Mine penuh...", 2);
+			out(getTime(), "Pindahkan Mine --> walet", 1);
+			for($i = 10; $i > -1; $i--){
+				echo " \r";
+				echo getTime();
+				echo " [{$i}] Memindahkan..!";
+				echo " \r";
+				sleep(1);
+			}
+			echo "\n";
+			out(getTime(), "Selesai...", 1);
+			$col = collect($u, $url['cl']);
+			out(getTime(), "Berhasil memindahkan {$col}\033[1;31m TRX", 5);
+			out(getTime(), "Closing system...", 120);
+			// system('clear');
+		}
+	} 
+	if($t1[0] == 23 && $t1[1] == 43) {
+		out(getTime(), "Menunggu waktu closing . . .", 1);
+			for($i = 900; $i > -1; $i--){
+			//$pls = $pls + $pl;
+			$range = $i % 3;
+		$per = (900 - $i) * 100 / 900;
+		$pc = floor($per);
+		
+		echo " \r";
+		echo getTime()." ";
+		echo "\033[0;31m[\033[0;33m{$pc}%\033[0;31m]\033[0;37m Closing";
+		if($range == 0) {
+			echo ".";
+		} else if($range == 1){
+			echo "..";
+		} else {
+			echo "...";
+		}
+		
+		echo "   \r";
+		
+		sleep(1);
+		} // end for
 
-// 			$per = (900 - $i) * 100 / 900;
-// 			$pc = floor($per);
-// 			if($range == 0) { 
-// 				echo " \r";
-// 				echo "[{$pc}%] Reload";
+		if($dt['bl'] > 0.0001){
+			out(getTime(), "Mine penuh...", 2);
+			out(getTime(), "Pindahkan Mine --> walet", 1);
+			for($i = 10; $i > -1; $i--){
+				echo " \r";
+				echo getTime();
+				echo " [{$i}] Memindahkan..!";
+				echo " \r";
+				sleep(1);
+			}
+			echo "\n";
+			out(getTime(), "Selesai...", 1);
+			$col = collect($u, $url['cl']);
+			out(getTime(), "Berhasil memindahkan {$col}\033[1;31m TRX", 5);
+			out(getTime(), "Closing system...", 120);
+			// system('clear');
+		}
+	} 
 
-// 			}
-// 			sleep(1);
-// 		}
+	if($t1[0] == 23 && $t1[1] == 44) {
+		out(getTime(), "Menunggu waktu closing . . .", 1);
+			for($i = 840; $i > -1; $i--){
+			//$pls = $pls + $pl;
+			$range = $i % 3;
+		$per = (840 - $i) * 100 / 840;
+		$pc = floor($per);
+		
+		echo " \r";
+		echo getTime()." ";
+		echo "\033[0;31m[\033[0;33m{$pc}%\033[0;31m]\033[0;37m Closing";
+		if($range == 0) {
+			echo ".";
+		} else if($range == 1){
+			echo "..";
+		} else {
+			echo "...";
+		}
+		
+		echo "   \r";
+		
+		sleep(1);
+		} // end for
 
-// 		$ms = wd($u, $url);
-// 		echo "\n{$ms}";
-// 		sleep(5);
-// 	} else {
-// 		exit();
-// 	}
+		if($dt['bl'] > 0.0001){
+		out(getTime(), "Mine penuh...", 2);
+		out(getTime(), "Pindahkan Mine --> walet", 1);
+		for($i = 10; $i > -1; $i--){
+			echo " \r";
+			echo getTime();
+			echo " [{$i}] Memindahkan..!";
+			echo " \r";
+			sleep(1);
+		}
+		echo "\n";
+		out(getTime(), "Selesai...", 1);
+		$col = collect($u, $url['cl']);
+		out(getTime(), "Berhasil memindahkan {$col}\033[1;31m TRX", 5);
+		out(getTime(), "Closing system...", 120);
+		// system('clear');
+		}
+	}
 
-// } // end while
-// echo "\n";
+	if($t1[0] == 23 && $t1[1] == 45) {
+		out(getTime(), "Menunggu waktu closing . . .", 1);
+			for($i = 780; $i > -1; $i--){
+			//$pls = $pls + $pl;
+			$range = $i % 3;
+		$per = (780 - $i) * 100 / 780;
+		$pc = floor($per);
+		
+		echo " \r";
+		echo getTime()." ";
+		echo "\033[0;31m[\033[0;33m{$pc}%\033[0;31m]\033[0;37m Closing";
+		if($range == 0) {
+			echo ".";
+		} else if($range == 1){
+			echo "..";
+		} else {
+			echo "...";
+		}
+		
+		echo "   \r";
+		
+		sleep(1);
+		} // end for
 
-$a = "saya dari pay.php";
+		if($dt['bl'] > 0.0001){
+		out(getTime(), "Mine penuh...", 2);
+		out(getTime(), "Pindahkan Mine --> walet", 1);
+		for($i = 10; $i > -1; $i--){
+			echo " \r";
+			echo getTime();
+			echo " [{$i}] Memindahkan..!";
+			echo " \r";
+			sleep(1);
+		}
+		echo "\n";
+		out(getTime(), "Selesai...", 1);
+		$col = collect($u, $url['cl']);
+		out(getTime(), "Berhasil memindahkan {$col}\033[1;31m TRX", 5);
+		out(getTime(), "Closing system...", 120);
+		// system('clear');
+		}
+	}
+}
 
 ?>

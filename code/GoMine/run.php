@@ -1,30 +1,130 @@
 <?php
-system('clear');
-// https://gomine.xyz/user/ptc
-// http://skippyads.com/?page=verify&p=iriyFwfnGmx&i=328&u=8692&t=ac02a50fd8293df96cdca0901e4f16af
-// <body> Done</body>
-
-// cookie : PHPSESSID=v538mnbsc4uhuk2r9rmn0ak397; cxcc=ID; _ga=GA1.2.1737720379.1631402313; _gid=GA1.2.1339411939.1631402313
-// http://skippyads.com/?page=click&p=iriyFwfnGmx&i=329&u=8692
-// iframe.setAttribute("src", "?page=verify&p=iriyFwfnGmx&i=329&u=8692&t=215887647ac0a0b4cbb3e2b8f620726c");
-
 // kumpulan link
-$urlPtc = [
-	'ptc' => "https://skippyads.com/?page=wall&p=iriyFwfnGmx&u=8692",
-	'get' => "http://skippyads.com/?page=click&p=iriyFwfnGmx&i=329&u=8692",
-	'verify' => "http://skippyads.com/?page=verify&p=iriyFwfnGmx&i=328&u=8692&t=ac02a50fd8293df96cdca0901e4f16af"
+
+
+function setData($u, $url) {
+	$ch=curl_init();
+	curl_setopt_array($ch, array(
+	CURLOPT_URL => $url,
+	CURLOPT_RETURNTRANSFER => 1,
+	//CURLOPT_CUSTOMREQUEST => 'GET',
+	CURLOPT_FOLLOWLOCATION => 1,
+	CURLOPT_HTTPHEADER => $u,
+	CURLOPT_SSL_VERIFYPEER => 0,
+	)
+);
+$result = curl_exec($ch);
+$info = curl_getinfo($ch);
+$b = explode('var sec = ', $result)[1];
+$bl = explode(';', $b)[0];
+$s = explode('sec = sec + ', $result)[1];
+$sec = explode(';', $s)[0];
+$us = explode('<h3>USER: ', $result)[1];
+$user = explode('<br>', $us)[0];
+// print_r(gettype($bl));
+/**
+*
+var sec = 7.5095E-5;
+	var a = setInterval(function () {
+		sec = sec + 1.15E-8;
+**/
+// TVjHnGtvJwksB3YxFeW7NGq3nhBqi7jZ9T<br>
+//<b style="font-weight: 600;">
+// </b> Power: 5Kh/s | Earning:  0.00000012  TRX/sec | Daily: 0.010 TRX</b>
+// <br>
+	$data = [
+		'wl' => $user,
+		'bl' => $bl,
+		'sec' => $sec
 ];
+	
+curl_close($ch);
+return $data;
+}
+function collect($u, $url) {
+	$ch=curl_init();
+	curl_setopt_array($ch, array(
+	CURLOPT_URL => $url,
+	CURLOPT_RETURNTRANSFER => 1,
+	CURLOPT_CUSTOMREQUEST => 'POST',
+	CURLOPT_FOLLOWLOCATION => 1,
+	CURLOPT_HTTPHEADER => $u,
+	CURLOPT_SSL_VERIFYPEER => 0,
+	)
+);
+$result = curl_exec($ch);
+$info = curl_getinfo($ch);
+curl_close($ch);
+return $result;
+}
+
+function getTimeArr() {
+	// set the default timezone to use.
+	date_default_timezone_set('UTC');
+	$timezone  = -4; //(GMT -4:00) waktu server
+	$end = gmdate("H:i:s", time() + 3600*($timezone+date("I")));
+	// echo gmdate("Y/m/j H:i:s", time() + 3600*($timezone+date("I")));
+	$clock = explode(':', $end);
+	if($clock[0] == "00" && $clock[1] == "00" && $clock[2] == "00"){
+		echo "\n";
+		echo "Waktu selesai 00:00:00\n"; sleep(1);
+		echo "Cek Link ->\n";sleep(1);
+		echo "https://gomine.xyz/user/home\n";
+		exit();
+	}
+	
+	return $clock;
+} // end function getTime
+
+function getTime() {
+	// set the default timezone to use.
+	date_default_timezone_set('UTC');
+	$timezone  = -4; //(GMT -4:00) waktu server
+	$end = gmdate("H:i:s", time() + 3600*($timezone+date("I")));
+	// echo gmdate("Y/m/j H:i:s", time() + 3600*($timezone+date("I")));
+	$clock = explode(':', $end);
+	if($clock[0] == "00" && $clock[1] == "00" && $clock[2] == "00"){
+		echo "\n";
+		echo "Waktu selesai 00:00:00\n"; sleep(1);
+		echo "Cek Link ->\n";sleep(1);
+		echo "https://gomine.xyz/user/home\n";
+		exit();
+	}
+	
+	return "\033[1;31m[\033[0m{$end}\033[1;31m]\033[0;37m";
+} // end function getTime
 
 
-$user = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:92.0) Gecko/20100101 Firefox/92.0";
-$cookie = "PHPSESSID=v538mnbsc4uhuk2r9rmn0ak397; cxcc=ID; _ga=GA1.2.1737720379.1631402313; _gid=GA1.2.1339411939.1631402313";
+function out($tm, $text, $sl){
+	echo $tm." ";
+	echo $text."\n";
+	sleep($sl);
+}
 
-$u = [
-'User-Agent: '.$user,
-'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-'Accept-Language: en-US,en;q=0.5',
-'Cookie: '.$cookie
-];
+function getLinkPtc($u, $url){
+	$ch=curl_init();
+  	curl_setopt_array($ch, array(
+	    CURLOPT_URL => $url,
+	    CURLOPT_RETURNTRANSFER => 1,
+	    //CURLOPT_CUSTOMREQUEST => 'GET',
+	    CURLOPT_FOLLOWLOCATION => 1,
+	    CURLOPT_HTTPHEADER => $u,
+	    CURLOPT_SSL_VERIFYPEER => 0,
+	    )
+    );
+    $result = curl_exec($ch);
+    $info = curl_getinfo($ch);
+
+    $link = "";
+    if($info['http_code'] == 200) {
+    	$get = explode('src="https://skippyads.com/', $result)[1];
+	    $link = explode('"></iframe>', $get)[0];
+	
+    }
+    
+    curl_close($ch);
+    return "https://skippyads.com/".$link;
+}
 
 function setPtc($u, $url) {
 	$ch=curl_init();
@@ -119,38 +219,49 @@ function verifyPtc($u, $url){
     return $msg;
 }
 
+function exePTC($set, $u){ 
 
-while(true){ 
-	system('clear');
-$set = setPtc($u, $urlPtc['ptc']);
-echo "Sisa ".count($set)." PTC";
-echo "\n";
-	if(count($set) > 0){ 
+	out(getTime(), "Sisa ".count($set)." PTC", 1);
+	// echo "Sisa ".count($set)." PTC";
+	// echo "\n";
+	if(count($set) > 0){
 		if($set[0] != null){
-			echo "\nClaim ".$set[0]['title'];
-			sleep(2);
-			echo "\nBalace : ".$set[0]['claim']." TRX";
-			sleep(2);
+			out(getTime(), "Claim ".$set[0]['title'], 2);
+			// echo "\nClaim ".$set[0]['title'];
+			// sleep(2);
+			out(getTime(), "Balace : ".$set[0]['claim']." TRX", 2);
+			// echo "Balace : ".$set[0]['claim']." TRX";
+			// sleep(2);
 			// echo "\nDesk : ".$set[0]['desk'];
 			// sleep(2);
-			echo "\nTimer ".$set[0]['tm']." Second";
-			sleep(1);
+			out(getTime(), "Timer ".$set[0]['tm']." Second", 1);
+			// echo "\nTimer ".$set[0]['tm']." Second";
+			// sleep(1);
 			$ur = getPtc($u, $set[0]['uri']);
-			echo "\n";
+			// echo "\n";
 			for($i = $set[0]['tm']; $i > -1; $i--){
-					echo " \r";
-					echo "[{$i}] Get";
-					sleep(1);
-				}
+				echo " \r";
+				echo getTime();
+				echo " [{$i}] Get";
+				echo " \r";
+				sleep(1);
+			}
+			echo "\n";
 			$ms = verifyPtc($u, $ur);
-			print_r($ms); sleep(2);	
-		} else { exit(); }
+			$msg = preg_replace('/\s+/', '', $ms);
+			out(getTime(), $msg, 2);
+			// print_r($ms); 
+			// sleep(2);
+		} else { 
+			out(getTime(), "PTC udah tidak tersedia", 2);
+		 }
+	} // end if 
+	else {
+		sleep(5);
+		system('clear');
+	}
 
-	echo "\n";
-	} else { exit(); }
-	echo "Reload...";
-	sleep(5);
-} // end while
+} // end function
 
 
 
