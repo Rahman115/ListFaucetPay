@@ -11,7 +11,7 @@ $url = [
 	'wd' => "https://iqfaucet.com/account.php?withdr=fp"
 ];
 $user = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:92.0) Gecko/20100101 Firefox/92.0";
-$cookie = "PHPSESSID=ivanl499kr1oed4espp1tnrhg6; refer=208087; bitmedia_fid=eyJmaWQiOiI1M2I4NzdhNWEyNDhiNDhiMTM4YWE3ZjZjYjY0Yzc2MCIsImZpZG5vdWEiOiI1MjA4ODI4ODczNTYwMjdmOGZlNGZiYTQyY2NkNGQ0NSJ9; _ccnsad_pop=500";
+$cookie = "PHPSESSID=vbng315esp6jr6mrfu6cvo45c4; _ga=GA1.2.586875909.1631820981; _gid=GA1.2.1288826454.1631820981; _data_cpc=32-1_78-2_229-1; __.popunder=1; _gat_gtag_UA_171440311_1=1";
 
 $u = [
 'User-Agent: '.$user,
@@ -100,7 +100,7 @@ while (true) {
 		sleep(3);
 		echo "\nLakukan WD";
 		getWithdrawl($u, $url['wd']);
-		for($i = 300; $i > -1; $i--){
+		for($i = 60; $i > -1; $i--){
 			echo " \r";
 			echo "[{$i}] Reload";
 			sleep(1);
