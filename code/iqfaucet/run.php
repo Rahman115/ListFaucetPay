@@ -11,7 +11,7 @@ $url = [
 	'wd' => "https://iqfaucet.com/account.php?withdr=fp"
 ];
 $user = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:92.0) Gecko/20100101 Firefox/92.0";
-$cookie = "PHPSESSID=vbng315esp6jr6mrfu6cvo45c4; _ga=GA1.2.586875909.1631820981; _gid=GA1.2.1288826454.1631820981; _data_cpc=32-1_78-2_229-1; __.popunder=1; _gat_gtag_UA_171440311_1=1";
+$cookie = "PHPSESSID=tgm112d237s31g8t6o77t7k586; bitmedia_fid=eyJmaWQiOiI1M2I4NzdhNWEyNDhiNDhiMTM4YWE3ZjZjYjY0Yzc2MCIsImZpZG5vdWEiOiI1MjA4ODI4ODczNTYwMjdmOGZlNGZiYTQyY2NkNGQ0NSJ9; _ccnsad_pop=500";
 
 $u = [
 'User-Agent: '.$user,
@@ -72,35 +72,34 @@ $ch=curl_init();
     $blc = explode('<div class="alert alert-success">', $bl)[1];
 	$info = curl_getinfo($ch);
 
-	print_r(gettype($blc));
+	// print_r(gettype($blc));
 
     $dt = [
     	'bl' => $blc,
     	'http' => $info['http_code']
     ];
 	
-	echo "\nHas Send : \n";
-	print_r($dt);
+	// echo "\nHas Send : \n";
+	// print_r($dt);
     // print_r($info);
     
     curl_close($ch);
-    // return $result;
-
-
-
-}
+    return $dt;
+} // end function
 
 while (true) {
-	system('clear');
+	// system('clear');
 
 	$hs = getCek($u, $url['cek']);
 
 	if($hs['bl'] > 0.00000000) {
 		echo "\nBalance : ".$hs['bl'];
 		sleep(3);
-		echo "\nLakukan WD";
-		getWithdrawl($u, $url['wd']);
-		for($i = 60; $i > -1; $i--){
+		echo "\nLakukan WD ";
+		$wd = getWithdrawl($u, $url['wd']);
+		echo $wd['bl']." DOGE";
+		echo "\n";
+		for($i = 120; $i > -1; $i--){
 			echo " \r";
 			echo "[{$i}] Reload";
 			sleep(1);
@@ -108,7 +107,7 @@ while (true) {
 	} else {
 		// exit();
 		echo "\nWD panding";
-		for($i = 60; $i > -1; $i--){
+		for($i = 240; $i > -1; $i--){
 			echo " \r";
 			echo "[{$i}] Reload";
 			sleep(1);
