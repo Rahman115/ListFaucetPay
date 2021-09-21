@@ -2,78 +2,7 @@
 // kumpulan link
 
 
-function setData($u, $url) {
-	$ch=curl_init();
-	curl_setopt_array($ch, array(
-	CURLOPT_URL => $url,
-	CURLOPT_RETURNTRANSFER => 1,
-	//CURLOPT_CUSTOMREQUEST => 'GET',
-	CURLOPT_FOLLOWLOCATION => 1,
-	CURLOPT_HTTPHEADER => $u,
-	CURLOPT_SSL_VERIFYPEER => 0,
-	)
-);
-$result = curl_exec($ch);
-$info = curl_getinfo($ch);
 
-// print_r($result);
-
-// exit();
-// DANGER'>
-// SUCCESS'>
-$rn = explode("MINER: <b class='text-", $result)[1];
-$rn1 = explode('</b>', $rn)[0];
-$run = explode("'>", $rn1);
-
-// var_dump($run);
-
-// exit();
-$ver = true;
-
-if($run[1] == "STOPPED") {
-	$ver = false;
-
-	$bl = 0;
-	$sec = 0;
-} else { 
-	$ver = true;
-
-	$b = explode('var sec = ', $result)[1];
-	$bl = explode(';', $b)[0];
-	$s = explode('sec = sec + ', $result)[1];
-	$sec = explode(';', $s)[0];
-
-
-}
-if($bl == 0) {
-	$user = "null";
-} else { 
-	$us = explode('<h3>USER: ', $result)[1];
-	$user = explode('<br>', $us)[0];
-	// print_r(gettype($bl));
-
-}
-/**
-*
-var sec = 7.5095E-5;
-	var a = setInterval(function () {
-		sec = sec + 1.15E-8;
-**/
-// TVjHnGtvJwksB3YxFeW7NGq3nhBqi7jZ9T<br>
-//<b style="font-weight: 600;">
-// </b> Power: 5Kh/s | Earning:  0.00000012  TRX/sec | Daily: 0.010 TRX</b>
-// <br>
-	$data = [
-		'verify' => $ver,
-		'msg' => $run[1],
-		'wl' => $user,
-		'bl' => $bl,
-		'sec' => $sec
-];
-	
-curl_close($ch);
-return $data;
-}
 function collect($u, $url) {
 	$ch=curl_init();
 	curl_setopt_array($ch, array(
@@ -91,23 +20,7 @@ curl_close($ch);
 return $result;
 }
 
-function getTimeArr() {
-	// set the default timezone to use.
-	date_default_timezone_set('UTC');
-	$timezone  = -4; //(GMT -4:00) waktu server
-	$end = gmdate("H:i:s", time() + 3600*($timezone+date("I")));
-	// echo gmdate("Y/m/j H:i:s", time() + 3600*($timezone+date("I")));
-	$clock = explode(':', $end);
-	if($clock[0] == "00" && $clock[1] == "00" && $clock[2] == "00"){
-		echo "\n";
-		echo "Waktu selesai 00:00:00\n"; sleep(1);
-		echo "Cek Link ->\n";sleep(1);
-		echo "https://gomine.xyz/user/home\n";
-		exit();
-	}
-	
-	return $clock;
-} // end function getTime
+
 
 function getTime() {
 	// set the default timezone to use.
@@ -129,6 +42,8 @@ function out($tm, $text, $sl){
 }
 
 function getLinkPtc($u, $url){
+
+	// var_dump($url);
 	$ch=curl_init();
   	curl_setopt_array($ch, array(
 	    CURLOPT_URL => $url,
@@ -141,6 +56,8 @@ function getLinkPtc($u, $url){
     );
     $result = curl_exec($ch);
     $info = curl_getinfo($ch);
+
+// print_r($result);
 
     $link = "";
     if($info['http_code'] == 200) {
