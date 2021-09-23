@@ -109,11 +109,35 @@ function getData($result) {
 		$data = [
 			'coin' => "Kosong",
 			'var' => 0,
-			'balance' => "0",
+			'balance' => 0,
 			'table' => 0
 		];
 	}
 	return $data;
+}
+
+/**
+
+collect 
+
+**/
+
+function collect($u, $url) {
+	
+	$ch=curl_init();
+	curl_setopt_array($ch, array(
+	CURLOPT_URL => $url,
+	CURLOPT_RETURNTRANSFER => 1,
+	CURLOPT_CUSTOMREQUEST => 'POST',
+	CURLOPT_FOLLOWLOCATION => 1,
+	CURLOPT_HTTPHEADER => $u,
+	CURLOPT_SSL_VERIFYPEER => 0,
+	)
+);
+$result = curl_exec($ch);
+$info = curl_getinfo($ch);
+curl_close($ch);
+return $result;
 }
 
 /**
@@ -201,12 +225,12 @@ $data['verify'] = true;
 
 if($run[1] == "STOPPED") {
 	$data['verify'] = false;
-
+	$data['balance'] = "";
 	$data['bl'] = 0;
 	$data['sec'] = 0;
 } else { 
 	$data['verify'] = true;
-
+	$data['balance'] = "";
 	$b = explode('var sec = ', $result)[1];
 	$data['bl'] = explode(';', $b)[0];
 	$s = explode('sec = sec + ', $result)[1];
@@ -247,9 +271,36 @@ curl_close($ch);
 return $data;
 }
 
-function verifyMiner($dt, $per){
+function verifyMiner($u, $dt, $per, $url){
 	out(getTime(), "\033[1;33m{$dt['msg']}", 1);
-	out(getTime(), "Walet [{$per} %] 🗂  \033[1;33m{$dt['bl']}\033[1;31m {$dt['coin']}", 1);
+	out(getTime(), "Walet [{$per} %] 🗂  \033[1;33m{$dt['balance']}\033[1;31m {$dt['coin']}", 1);
+
+	echo getTime();
+	echo " Miners +\033[1;33m";
+	echo rtrim(sprintf('%.10f',floatval($dt['bl'])),'0');
+	echo "\033[1;31m {$dt['coin']} \n"; sleep(1);
+	out(getTime(), "Cek Hasil Mine", 2);
+
+	$mPer = floor((0.0001 - $dt['bl']) * 100 / 0.0001);
+	$mnPer = 100 - $mPer;
+
+	if($dt['bl'] > 0.0001){
+		out(getTime(), "🔻 Mine penuh {$mnPer}%", 2);
+		out(getTime(), "Pindahkan Mine --> walet", 1);
+		for($i = 10; $i > -1; $i--){
+			echo " \r";
+			echo getTime();
+			echo " [{$i}] Memindahkan..!";
+			echo " \r";
+			sleep(1);
+		}
+		echo "\n";
+		out(getTime(), "Selesai...", 1);
+		$col = collect($u, $url);
+		out(getTime(), "🗂 Berhasil memindahkan {$col}\033[1;31m {$dt['coin']}", 5);
+		out(getTime(), "Reload system...", 5);
+		// system('clear');
+		}
 }
 
 ?>

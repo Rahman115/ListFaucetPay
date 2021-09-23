@@ -3,22 +3,7 @@
 
 
 
-function collect($u, $url) {
-	$ch=curl_init();
-	curl_setopt_array($ch, array(
-	CURLOPT_URL => $url,
-	CURLOPT_RETURNTRANSFER => 1,
-	CURLOPT_CUSTOMREQUEST => 'POST',
-	CURLOPT_FOLLOWLOCATION => 1,
-	CURLOPT_HTTPHEADER => $u,
-	CURLOPT_SSL_VERIFYPEER => 0,
-	)
-);
-$result = curl_exec($ch);
-$info = curl_getinfo($ch);
-curl_close($ch);
-return $result;
-}
+
 
 
 
@@ -68,6 +53,33 @@ function getLinkPtc($u, $url){
     
     curl_close($ch);
     return "https://skippyads.com/".$link;
+}
+
+function setSlwall($u, $url){
+	$ch=curl_init();
+  	curl_setopt_array($ch, array(
+	    CURLOPT_URL => $url,
+	    CURLOPT_RETURNTRANSFER => 1,
+	    //CURLOPT_CUSTOMREQUEST => 'GET',
+	    CURLOPT_FOLLOWLOCATION => 1,
+	    CURLOPT_HTTPHEADER => $u,
+	    CURLOPT_SSL_VERIFYPEER => 0,
+	    )
+    );
+    $result = curl_exec($ch);
+
+    // print_r($result);
+    // frameborder="0" src="https://bitswall.net/offerwall/gzrur79r7tfbcsowvje5a5vcwdh0z5/8967"></iframe>
+
+    $lk = explode('frameborder="0" src="https://bitswall.net/', $result)[1];
+    $link = explode('"></iframe>', $lk)[0];
+    $links = "https://bitswall.net/".$link;
+    // var_dump($links);
+
+    // exit();
+
+    curl_close($ch);
+    return $links;
 }
 
 function setPtc($u, $url) {
@@ -130,12 +142,19 @@ function getPtc($u, $url){
 	    )
     );
     $result = curl_exec($ch);
+    $ht = curl_getinfo($ch)['http_code'];
 
-    $sUri = explode('iframe.setAttribute("src", "', $result)[1];
-    $uri = explode('");', $sUri)[0];
+    if($ht == 200 ) { 
+	    $sUri = explode('iframe.setAttribute("src", "', $result)[1];
+	    $uri = explode('");', $sUri)[0];
 
-    // print_r($result);
-    $str = "http://skippyads.com/".$uri;
+	    // var_dump($ht);
+
+	    // exit();
+	    $str = "http://skippyads.com/".$uri;
+	} else {
+		$str = "";
+	}
     curl_close($ch);
     return $str;
 }
@@ -153,6 +172,8 @@ function verifyPtc($u, $url){
 	    )
     );
     $result = curl_exec($ch);
+    
+    var_dump($result);
 
     $s = explode('<body>', $result)[1];
     $msg = explode('</body>', $s)[0];
@@ -164,25 +185,17 @@ function verifyPtc($u, $url){
 }
 
 function exePTC($set, $u){ 
-
 	out(getTime(), "Sisa ".count($set)." PTC", 1);
-	// echo "Sisa ".count($set)." PTC";
-	// echo "\n";
+
 	if(count($set) > 0){
 		if($set[0] != null){
 			out(getTime(), "Claim ".$set[0]['title'], 2);
-			// echo "\nClaim ".$set[0]['title'];
-			// sleep(2);
 			out(getTime(), "Balace : ".$set[0]['claim']." TRX", 2);
-			// echo "Balace : ".$set[0]['claim']." TRX";
-			// sleep(2);
-			// echo "\nDesk : ".$set[0]['desk'];
-			// sleep(2);
 			out(getTime(), "Timer ".$set[0]['tm']." Second", 1);
-			// echo "\nTimer ".$set[0]['tm']." Second";
-			// sleep(1);
+
 			$ur = getPtc($u, $set[0]['uri']);
-			// echo "\n";
+
+			if($ur != "" || $ur != null ) { 
 			for($i = $set[0]['tm']; $i > -1; $i--){
 				echo " \r";
 				echo getTime();
@@ -193,9 +206,12 @@ function exePTC($set, $u){
 			echo "\n";
 			$ms = verifyPtc($u, $ur);
 			$msg = preg_replace('/\s+/', '', $ms);
+		} else {
+			$msg = "not completed";
+		}
+			
 			out(getTime(), $msg, 2);
-			// print_r($ms); 
-			// sleep(2);
+
 		} else { 
 			out(getTime(), "PTC udah tidak tersedia", 2);
 		 }
