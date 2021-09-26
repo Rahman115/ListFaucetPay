@@ -52,6 +52,10 @@ function getLinkPtc($u, $url){
     }
     
     curl_close($ch);
+
+    $l = "https://skippyads.com/".$link;
+    // echo "\n";
+    // var_dump($l);
     return "https://skippyads.com/".$link;
 }
 
@@ -123,7 +127,7 @@ function setPtc($u, $url) {
     }
     
 	$info = curl_getinfo($ch);
-    
+    // var_dump($uri[$num][0]);
     curl_close($ch);
     return $data;
 }
@@ -156,6 +160,8 @@ function getPtc($u, $url){
 		$str = "";
 	}
     curl_close($ch);
+
+    // var_dump($str);
     return $str;
 }
 
@@ -172,13 +178,14 @@ function verifyPtc($u, $url){
 	    )
     );
     $result = curl_exec($ch);
-    
-    var_dump($result);
 
     $s = explode('<body>', $result)[1];
     $msg = explode('</body>', $s)[0];
 
+    // var_dump(count($msg));
+    // var_dump($msg);
     // print_r($result);
+    // exit();
     // $str = "http://skippyads.com/".$uri;
     curl_close($ch);
     return $msg;

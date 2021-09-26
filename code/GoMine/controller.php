@@ -1,14 +1,21 @@
 <?php 
 /**
+ * Color code
+ * \033[0;37m : putih
+ * \033[0m
+ * \033[1;33m : orange
+ * \033[1;31m : merah 
+ * \033[1;34m : biru
+ * \033[1;32m : hijau
+ * \033[1;35m : ungu
 
 user_agent 
 
 **/
-function user_agent($user, $cookie){
+function user_agent($user, $cookie, $accept){
 	$u = [
 		'User-Agent: '.$user,
-		'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-		'Accept-Language: en-US,en;q=0.5',
+		'Accept: '.$accept,
 		'Cookie: '.$cookie
 		];
 	return $u;
@@ -52,16 +59,18 @@ function setPay($u, $url){
 	CURLOPT_FOLLOWLOCATION => 1,
 	CURLOPT_HTTPHEADER => $u,
 	CURLOPT_SSL_VERIFYPEER => 0,
+	// CURLOPT_TIMEOUT_MS => 2000
 	)
 );
 $result = curl_exec($ch);
 $http = curl_getinfo($ch);
+
 if($http['http_code'] == 200) {
 	$res = $result;
 } else {
 	$res = null;
 }
-// print_r($http);
+
 curl_close($ch);
 return $res;
 }
@@ -74,10 +83,7 @@ getData
 **/
 function getData($result) {
 
-
 	$lis = explode('<a class="nav-link" href="', $result);
-	// print_r($lis[1]);
-	// var_dump(count($lis));
 
 	if($result != null && count($lis) != 6) {
 	$blc = explode('<h2 class="text-center"><span> ', $result)[1];
@@ -166,6 +172,9 @@ if($info['http_code'] == 200) {
 	$msge = explode('</h4>', $msg)[0];
 
 	$mesage = explode("'>", $msge);	
+
+	$mm = explode(' to address ', $mesage[1])[0];
+	$mesage[1] = $mm;
 }
 curl_close($ch);
 return $mesage;
@@ -192,12 +201,6 @@ function setDataMiner($u, $url) {
 $result = curl_exec($ch);
 $info = curl_getinfo($ch);
 $data = array();
-// print_r($result);
-
-// exit();
-// 15Kh/s
-// 0.00000014  DOGE
-// 0.012 DOGE 
 
 $pw = explode('</b> Power: ', $result)[1];
 $Ea = explode(' | Earning:  ', $pw);
@@ -218,9 +221,6 @@ $rn1 = explode('</b>', $rn)[0];
 $run = explode("'>", $rn1);
 $data['msg'] =  $data['coin']." ".$run[1];
 
-// var_dump($run);
-
-// exit();
 $data['verify'] = true;
 
 if($run[1] == "STOPPED") {
@@ -246,61 +246,122 @@ if($data['bl'] == 0) {
 	// print_r(gettype($bl));
 
 }
-/**
-*
-var sec = 7.5095E-5;
-	var a = setInterval(function () {
-		sec = sec + 1.15E-8;
-**/
-// TVjHnGtvJwksB3YxFeW7NGq3nhBqi7jZ9T<br>
-//<b style="font-weight: 600;">
-// </b> Power: 5Kh/s | Earning:  0.00000012  TRX/sec | Daily: 0.010 TRX</b>
-// <br>
-// 	$data = [
-// 		'verify' => $ver,
-// 		'msg' => $run[1],
-// 		'wl' => $user,
-// 		'bl' => $bl,
-// 		'sec' => $sec
-// ];
-	
-curl_close($ch);
 
-// print_r($data);
-// exit();
+curl_close($ch);
 return $data;
 }
 
 function verifyMiner($u, $dt, $per, $url){
-	out(getTime(), "\033[1;33m{$dt['msg']}", 1);
-	out(getTime(), "Walet [{$per} %] 🗂  \033[1;33m{$dt['balance']}\033[1;31m {$dt['coin']}", 1);
+
+	// print_r($dt);
+
+	out(getTime(), "✅ \033[1;33m{$dt['msg']}", 1);
+	out(getTime(), "\033[1;34m{$per} % 👛  \033[1;33m{$dt['balance']}\033[1;31m {$dt['coin']}", 1);
 
 	echo getTime();
-	echo " Miners +\033[1;33m";
+	echo " ⏬ Mine Result +\033[1;33m";
 	echo rtrim(sprintf('%.10f',floatval($dt['bl'])),'0');
 	echo "\033[1;31m {$dt['coin']} \n"; sleep(1);
-	out(getTime(), "Cek Hasil Mine", 2);
-
+	out(getTime(), "🔻 Info Mining", 1);
+	out(getTime(), "📶 \033[1;37mPower \033[1;33m{$dt['power']}", 1);
+	out(getTime(), "📶 \033[1;37mRemine \033[1;33m{$dt['second']}/second", 1);
+	out(getTime(), "📶 \033[1;37mDaily \033[1;33m{$dt['daily']} \033[1;31m{$dt['coin']}", 1);
+	out(getTime(), "⏩ Cek Hasil Mine", 2);
+	slwall($u, $url['slwall'], $dt['power']);
+	// var_dump($url);
+// 
 	$mPer = floor((0.0001 - $dt['bl']) * 100 / 0.0001);
 	$mnPer = 100 - $mPer;
 
 	if($dt['bl'] > 0.0001){
 		out(getTime(), "🔻 Mine penuh {$mnPer}%", 2);
-		out(getTime(), "Pindahkan Mine --> walet", 1);
+		out(getTime(), "🔀 Pindahkan Mine ke walet", 1);
 		for($i = 10; $i > -1; $i--){
 			echo " \r";
 			echo getTime();
 			echo " [{$i}] Memindahkan..!";
-			echo " \r";
+			echo "\r";
 			sleep(1);
 		}
-		echo "\n";
-		out(getTime(), "Selesai...", 1);
-		$col = collect($u, $url);
-		out(getTime(), "🗂 Berhasil memindahkan {$col}\033[1;31m {$dt['coin']}", 5);
-		out(getTime(), "Reload system...", 5);
+		out(getTime(), "✅ Done             ", 1);
+		// 🔻✅🆗 📨🧱🧱🧱🧱🧱🧱🧱 🔚
+		// echo "\n";
+		// out(getTime(), "Selesai...", 1);
+		$col = collect($u, $url['collect']);
+		out(getTime(), "🆗  Berhasil memindahkan \033[1;33m{$col}\033[1;31m {$dt['coin']}", 5);
+		out(getTime(), "🔚  Reload system...", 5);
 		// system('clear');
+		} else {
+			out(getTime(), "🔻 {$mnPer}% Not Full", 2);
+
 		}
 }
+
+
+function slwall($u, $url, $khs){
+
+$khs = explode('Kh/s', $khs)[0];
+if($khs < 38){
+	$ch=curl_init();
+	curl_setopt_array($ch, array(
+	CURLOPT_URL => $url,
+	CURLOPT_RETURNTRANSFER => 1,
+	//CURLOPT_CUSTOMREQUEST => 'GET',
+	CURLOPT_FOLLOWLOCATION => 1,
+	CURLOPT_HTTPHEADER => $u,
+	CURLOPT_SSL_VERIFYPEER => 0,
+	)
+);
+	$result = curl_exec($ch);
+	$info = curl_getinfo($ch)['http_code'];
+	if($info == 200) { 
+		$t = explode(";'><td>", $result);
+		$no = 0;
+		for($i = 0; $i < count($t) -1; $i++) {
+			
+			$num = $i + 1;
+			$tb[$i] = explode('</b></a></div>', $t[$num])[0];
+			$var[$i] = explode('</td><td>', $tb[$i]);
+			$var[$i][1] = explode(' / ', $var[$i][1]);
+			
+			if($var[$i][1][0] == $var[$i][1][1] ){
+				$h[$i] = explode('href="', $var[$i][3])[1];
+				$var[$i][3] = explode('" ><b>', $h[$i]);
+				$var[$i][1] = $url.$var[$i][3][0];
+				$var[$i][3] = $var[$i][3][1];
+				// $v[$i] = $var[$i];
+			} else {
+				$h[$i] = explode("</a></div></td></tr><tr style='outline: 0px solid green", $var[$i][3])[0];
+				$var[$i][1] = 0;
+				$var[$i][3] = explode('18px;">', $h[$i])[1];
+			}
+
+			if($var[$i][3][0] != "" ){
+				$v[$i] = $var[$i];
+			}
+
+			if($v[$i][2] != "4"){
+				$vi[$no] = $v[$i];
+				$no++;
+			}
+		} // end for
+
+		for($j = 0; $j < count($vi); $j++){
+			if($vi[$j][3] == "Visit"){ 
+				out(getTime(), "🧱 [{$vi[$j][2]}] {$vi[$j][0]} : {$vi[$j][1]}", 0);
+			} else {
+				out(getTime(), "✅ [{$vi[$j][2]}] {$vi[$j][0]}", 0);
+			}
+		}
+		// var_dump($vi);
+		// var_dump($hr);
+		// exit();
+		// var_dump(count($t));
+	} else {
+		out(getTime(), "🔚 slwall GAGAL", 2);
+	}
+	curl_close($ch);
+	} // end if
+} // end func
 
 ?>
