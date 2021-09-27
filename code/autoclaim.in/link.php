@@ -29,7 +29,7 @@ $header[] = "cookie: ".$cookie;
 
 
 $short = array(
-  "Shrinkearn", "Tny","1bit","Mozlink","Vvc",
+  "Shrinkearn", "Tny","1bit","Mozlink","Vvc", "Icut",
 "Coocly","Exe","PingIt","Coin",
 "Megaurl","PoroFly","DropLink","Clk-sh","Rody","Rota",
 "Try2Link","Clicksfly","WoroFly",

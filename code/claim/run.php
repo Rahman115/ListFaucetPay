@@ -73,8 +73,8 @@ while (true) {
 		xLoop(60);
 	}
 
-    
-// 		echo "\n";
+    out("https://doge-faucet.com/?r=D6Lh3ALK2Gx5QsanxxfcoE6P2TiHnCJ21a", 1);
+// 		https://doge-faucet.com/?r=D6Lh3ALK2Gx5QsanxxfcoE6P2TiHnCJ21a
 
 
 

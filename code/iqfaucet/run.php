@@ -11,7 +11,7 @@ $url = [
 	'wd' => "https://iqfaucet.com/account.php?withdr=fp"
 ];
 $user = "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:92.0) Gecko/20100101 Firefox/92.0";
-$cookie = "PHPSESSID=85ubkooorog180v0fn57552fo2; bitmedia_fid=eyJmaWQiOiIzZGIwM2M3ZGY1MjUyNGRmMDM2NTJlMzA4N2U5NDM2OSIsImZpZG5vdWEiOiJkZjczN2U3MDhmMzJkNTJjYzE1MWYxZWZiNWQ1OWQ5OSJ9; refer=208360; _ccnsad_pop=500";
+$cookie = "PHPSESSID=lpve8luu1jma7oil3qkh4v2966; bitmedia_fid=eyJmaWQiOiI1M2I4NzdhNWEyNDhiNDhiMTM4YWE3ZjZjYjY0Yzc2MCIsImZpZG5vdWEiOiI1MjA4ODI4ODczNTYwMjdmOGZlNGZiYTQyY2NkNGQ0NSJ9";
 
 $u = [
 'User-Agent: '.$user,
