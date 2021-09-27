@@ -32,7 +32,8 @@ function out($ms, $tm){
 $num = 0;
 while (true) {
 	system('clear');
-
+	out("doge : D6Lh3ALK2Gx5QsanxxfcoE6P2TiHnCJ21a
+", 1);
 	$num++;
 	
 	out("Load ".$num, 1);

@@ -27,6 +27,16 @@ $header[] = "user-agent: ".$user_agent;
 $header[] = 'accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9';
 $header[] = "cookie: ".$cookie;
 
+
+$short = array(
+  "Shrinkearn", "Tny","1bit","Mozlink","Vvc",
+"Coocly","Exe","PingIt","Coin",
+"Megaurl","PoroFly","DropLink","Clk-sh","Rody","Rota",
+"Try2Link","Clicksfly","WoroFly",
+"9Bitco","ClaimClicksShort","Ezlinks",
+"Zshort","Cryptoon","Link1s"
+);
+
 $data = "currencies%5B%5D=DOGE&payout=3&frequency=2&boost=1";
 // $load = 🗂📄🗃
 function getShort($url, $u){
@@ -200,7 +210,8 @@ function verify($u, $data){
 
 //     $pages = fopen($r);
 //     $page = file_get_contents($r);
-    echo $r."\n";
+    echo "t : {$data['budge']} : {$data['view']} -- {$data['title']} \n";
+    echo "----- ".$r."\n";
     // echo $pages;
     curl_close($ch);
 }
@@ -221,43 +232,45 @@ function getTime() {
   system('clear');
   $res = getShort($url['short'], $header);
   $go = getListShort($res);
+// print_r($go[1]);
+// exit();
 
-for($i = 0; $i < 5; $i++) {
-  verify($header, $go[$i]);
+  // print_r($short);
+$num = 0;
+for($i = 0; $i < count($go); $i++) {
+  for($j = 0; $j < count($short); $j++) {
+    if($go[$i]['title'] == $short[$j]){
+      
+      $hsl[$num] = $go[$i];
+      $num++;
+      // var_dump();
+    }
+  }
+
+
+  // $num++;
+  // echo  $num." ";
+  // verify($header, $go[$i]);
+  // echo "\n\n";
   // sleep(2);
 }
-
+$qq = 0;
+for($i = 0; $i < count($hsl); $i++) {
+  $q = explode('/', $hsl[$i]['view'])[0];
+  $in = (int)($q);
+  for($j = 0; $j < $in; $j++) {
+    $qq++;
+    echo $qq."/{$in} ++";
+    verify($header, $hsl[$i]);
+    echo "\n";
+    sleep(1);
+  }
+  echo "\n\n";
+    sleep(2);
   
-  // sleep(5);
-// }
-  // print_r($go);
+}
 
-//   $start = start($url['start'], $header);
-//   //print_r($start);
-//   $show = showStart($start);
+  // print_r($hsl);
 
-// echo "\nUserName :".$show['username'];
-// echo "\nToken :".$show['token'];
-// echo "\nBalance :".$show['bale']." 🐶";
-// echo "\nTotal Time ".$show['esti']; //." ID : ".$show['idEsti'];
-// echo "\nTime reload ".$show['time']." ";// "menit ID : ".$show['idTime'];
-// echo "\n".$show['title'];
-// // echo "\n".$show['desk'];
-// echo "\n\n\n";
-// for($i = 300; $i > -1; $i--){
-//   $diskon = ((300 - $i)* 100)/300;
-//   $m = $i % 6;
-//   if($m == 0){
-//     echo "\r  ";
-//     echo $diskon." %";
-//   }
-//   sleep(1);
-// }
-//  // print_r($start);
-//  // print_r($go);
-// //print_r(count($go));
-// //echo "\nhello world \n";
-// // sleep(300);
-// }
 ?>
 

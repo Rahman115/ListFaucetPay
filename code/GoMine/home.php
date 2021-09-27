@@ -74,7 +74,7 @@ if($dtPayTn['var'] > $batas || $dtPayDg['var'] > $batas) {
 		out(getTime(), "Kapasitas {$payPerDg} %", 2);
 		out(getTime(), "Walet siap di Withdraw", 1);
 		if($payPerDg > 1000) {
-			$batas = $batas * 5;
+			$batas = $batas * 10;
 		}
 
 		if($payPerDg < 1000 && $payPerDg > 200) {
@@ -236,7 +236,7 @@ if($dtPayTn['var'] > $batas || $dtPayDg['var'] > $batas) {
 
 
 
-	if($t1[0] == '04' || $t1[0] == '05' ) { 
+	if($t1[0] == '20' || $t1[0] == '21' ) { 
 		$uri['trx']['ptc'] = getLinkPtc($trx, $uri['trx']['ptc']);
 		$setPTC = setPtc($trx, $uri['trx']['ptc']);
 		exePTC($setPTC, $trx);
